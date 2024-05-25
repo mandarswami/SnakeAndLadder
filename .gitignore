@@ -1,5 +1,11 @@
+# intermediate files
 *.o
 *.dat
 .vscode/
+
+# executables
 main
 project
+
+# directory for files not to be tracked
+noDir/

@@ -15,7 +15,7 @@
 
 using namespace std;
 
-class board;
+class Board;
 class Player;
 class Snake;
 class Ladder;
@@ -28,20 +28,25 @@ class Player
 public:
     Player(string &str) : position(0), name(str) {}
     void goTo(int &k) { position = k; }
-    void moveforward(int &k) { position += k; }
+    void moveforward(int &k)
+    {
+        if ((position + k) <= 100)
+            position += k;
+    }
     string getName() { return name; }
     int getPosition() { return position; }
 };
-class board
+class Board
 {
     vector<Player> players;
     vector<Snake> snakes;
     vector<Ladder> ladders;
 
 public:
-    board(int, vector<int> &);
-    void startSNLGame(const int &);
+    Board(int, vector<int> &);
+    void startSNLGame(vector<int> &);
     Player &winningPlayer();
+    void statusOfPlayers();
 };
 
 class Snake

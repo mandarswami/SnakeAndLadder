@@ -1,6 +1,6 @@
 #include "SNL.h"
 
-board::board(int n, vector<int> &SNL)
+Board::Board(int n, vector<int> &SNL)
 {
     players.reserve(n);
 
@@ -18,13 +18,17 @@ board::board(int n, vector<int> &SNL)
             snakes.emplace_back(Snake(SNL[i], SNL[i + 1]));
 }
 
-void board::startSNLGame(const int &diceThrows)
+void Board::startSNLGame(vector<int> &diceThrows)
 {
     auto p = players.begin();
-    for (int i = 0; i < diceThrows; i++)
+    int i = 1;
+    for (int &d : diceThrows)
     {
-        int thro = rand() % 6 + 1;
-        p->moveforward(thro);
+        printf("\n\tFor diceThrow(%d):%d \t For Player(%s):\n", i++, d, p->getName().c_str());
+        statusOfPlayers();
+        p->moveforward(d);
+        printf("\tAfter MoveForward:\n");
+        statusOfPlayers();
 
         bool y = true;
         while (y)
@@ -36,6 +40,8 @@ void board::startSNLGame(const int &diceThrows)
                 {
                     l.bite(*p);
                     y = true;
+                    printf("\tAfter bite:\n");
+                    statusOfPlayers();
                     break;
                 }
 
@@ -47,18 +53,23 @@ void board::startSNLGame(const int &diceThrows)
                 {
                     l.climb(*p);
                     y = true;
+                    printf("\tAfter climb:\n");
+                    statusOfPlayers();
                     break;
                 }
         }
 
-        if (thro != 6)
+        if (p->getPosition() == 100)
+            return;
+
+        if (d != 6)
             p++;
         if (p == players.end())
             p = players.begin();
     }
 }
 
-Player &board::winningPlayer()
+Player &Board::winningPlayer()
 {
     Player &won = players[0];
 
@@ -67,4 +78,12 @@ Player &board::winningPlayer()
             won = p;
 
     return won;
+}
+
+void Board::statusOfPlayers()
+{
+    printf("\t\tPositions of Players:\n\t\t\t");
+    for (Player &p : players)
+        printf("Player(%s):%d,\t", p.getName().c_str(), p.getPosition());
+    printf("\n\n");
 }
