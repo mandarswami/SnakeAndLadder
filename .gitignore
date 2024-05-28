@@ -8,4 +8,4 @@ main
 project
 
 # directory for files not to be tracked
-noDir/
+test/
