@@ -1,6 +1,6 @@
 #include "SNL.h"
 
-board::board(int n, vector<int> &SNL)
+Board::Board(int n, vector<int> &SNL)
 {
     players.reserve(n);
 
@@ -18,53 +18,97 @@ board::board(int n, vector<int> &SNL)
             snakes.emplace_back(Snake(SNL[i], SNL[i + 1]));
 }
 
-void board::startSNLGame(const int &diceThrows)
+void Board::startSNLGame(vector<int> &diceThrows)
 {
     auto p = players.begin();
-    for (int i = 0; i < diceThrows; i++)
+
+    for (int &d : diceThrows)
     {
-        int thro = rand() % 6 + 1;
-        p->moveforward(thro);
+        p->moveforward(d);
 
-        bool y = true;
-        while (y)
+        if (checkIfGameFinished(*p))
+            return;
+
+        bool snakeBitten = false,
+             ladderClimbed = false;
+
+        while (true)
         {
-            y = false;
-
-            for (Snake &l : snakes)
-                if (l.getMouth() == p->getPosition())
-                {
-                    l.bite(*p);
-                    y = true;
-                    break;
-                }
-
-            if (y)
+            if (isSnakePresent(*p))
+            {
+                snakeBitten = true;
                 continue;
+            }
 
-            for (Ladder &l : ladders)
-                if (l.getStart() == p->getPosition())
-                {
-                    l.climb(*p);
-                    y = true;
-                    break;
-                }
-        }
+            if (isLadderPresent(*p))
+                ladderClimbed = true;
+            else
+                break;
+        };
 
-        if (thro != 6)
+        if (checkIfGameFinished(*p))
+            return;
+
+        if (snakeBitten)
+            p++;
+        else if ((d != 6) && (!ladderClimbed))
             p++;
         if (p == players.end())
             p = players.begin();
     }
 }
 
-Player &board::winningPlayer()
+bool Board::checkIfGameFinished(Player &p)
 {
-    Player &won = players[0];
+    if (p.getPosition() == 100)
+    {
+        printf("\n🏁🏁Game Finished!!🏁🏁\n");
+        printf("\n🏆🏆Player(%s)🏆🏆 has won this Snake and ladder game \n\t by being first to reach at position:100\n", p.getName().c_str());
+        return true;
+    }
+    return false;
+}
 
-    for (Player &p : players)
-        if (p.getPosition() > won.getPosition())
+bool Board::isSnakePresent(Player &p)
+{
+    for (Snake &s : snakes)
+        if (s.getMouth() == p.getPosition())
+        {
+            s.bite(p);
+            printf("\n 🐍 bite to Player(%s), now at %d\n", p.getName().c_str(), p.getPosition());
+            return true;
+        }
+    return false;
+}
+
+bool Board::isLadderPresent(Player &p)
+{
+    for (Ladder &l : ladders)
+        if (l.getStart() == p.getPosition())
+        {
+            l.climb(p);
+            printf("\n 🪜 climb by Player(%s), now at %d\n", p.getName().c_str(), p.getPosition());
+            return true;
+        }
+
+    return false;
+}
+
+Player &Board::winningPlayer()
+{
+    auto won = players.begin();
+
+    for (auto p = players.begin(); p != players.end(); p++)
+        if (p->getPosition() > won->getPosition())
             won = p;
 
-    return won;
+    return *won;
+}
+
+void Board::statusOfPlayers()
+{
+    printf("\t\tPositions of Players:\n\t\t\t");
+    for (Player &p : players)
+        printf("Player(%s):%d,\t", p.getName().c_str(), p.getPosition());
+    printf("\n\n");
 }

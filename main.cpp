@@ -2,25 +2,26 @@
 
 int main()
 {
-    srand(time(0));
-    int n = 0, m = 0, t = 0;
-    vector<int> SNL;
+    int noOfPlayers = 0, totalSnakesLadders = 0, noOfDiceThrows = 0;
 
-    // read input from file
-    cin >> n >> m;
-    SNL.reserve(m);
+    cin >> noOfPlayers >> totalSnakesLadders >> noOfDiceThrows;
 
-    while (m--)
-        cin >> t,
-            SNL.emplace_back(t);
+    vector<int> SNL(totalSnakesLadders, 0);
+    vector<int> diceThrows(noOfDiceThrows, 0);
 
-    board mySNLBoard(n, SNL);
+    for (int i = 0; i < totalSnakesLadders; i++)
+        cin >> SNL[i];
 
-    mySNLBoard.startSNLGame(13);
+    for (int i = 0; i < noOfDiceThrows; i++)
+        cin >> diceThrows[i];
+
+    Board mySNLBoard(noOfPlayers, SNL);
+
+    mySNLBoard.startSNLGame(diceThrows);
 
     Player wonPlayer = mySNLBoard.winningPlayer();
 
-    printf("\nPlayer %s has won this Snake and ladder game \n\tby being at position %d\n", wonPlayer.getName().c_str(), wonPlayer.getPosition());
+    printf("\n🏆🏆Player(%s)🏆🏆 has won this Snake and ladder game \n\t by being at position:%d\n", wonPlayer.getName().c_str(), wonPlayer.getPosition());
 
     return 0;
 }
