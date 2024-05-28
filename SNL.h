@@ -26,7 +26,7 @@ class Player
     int position;
 
 public:
-    Player(string &str) : position(0), name(str) {}
+    Player(string &str) : name(str), position(0) {}
     void goTo(int &);
     void moveforward(int &);
     string getName();

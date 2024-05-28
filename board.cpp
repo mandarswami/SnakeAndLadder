@@ -11,7 +11,7 @@ Board::Board(int n, vector<int> &SNL)
         players.emplace_back(Player(s));
     }
 
-    for (int i = 0; i < SNL.size(); i += 2)
+    for (int i = 0; i < (int)SNL.size(); i += 2)
         if (SNL[i] < SNL[i + 1])
             ladders.emplace_back(Ladder(SNL[i], SNL[i + 1]));
         else

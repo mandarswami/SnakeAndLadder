@@ -1,17 +1,18 @@
-project: main.o board.o player.o snakeLadder.o
-	g++ main.o board.o player.o snakeLadder.o -o project
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra
+TARGET = project
+SRCS = main.cpp board.cpp player.cpp snakeLadder.cpp
+OBJS = $(SRCS:.cpp=.o)
 
-main.o: main.cpp SNL.h
-	g++ -c main.cpp -o main.o
+all: $(TARGET)
 
-board.o: board.cpp SNL.h
-	g++ -c board.cpp -o board.o
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
 
-player.o: player.cpp SNL.h
-	g++ -c player.cpp -o player.o
-
-snakeLadder.o: snakeLadder.cpp SNL.h
-	g++ -c snakeLadder.cpp -o snakeLadder.o
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rvf *.o project
+	rm -rvf $(OBJS) $(TARGET)
+
+.PHONY: all clean
