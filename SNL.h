@@ -43,7 +43,6 @@ public:
     Board(int, vector<int> &);
     void startSNLGame(vector<int> &);
     Player &winningPlayer();
-    void statusOfPlayers();
     bool isSnakePresent(Player &);
     bool isLadderPresent(Player &);
     bool checkIfGameFinished(Player &);

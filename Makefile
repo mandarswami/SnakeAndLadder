@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra
+CXXFLAGS = -std=c++17 -Wall -Wextra
 TARGET = project
 SRCS = main.cpp board.cpp player.cpp snakeLadder.cpp
 OBJS = $(SRCS:.cpp=.o)

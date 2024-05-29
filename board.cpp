@@ -104,11 +104,3 @@ Player &Board::winningPlayer()
 
     return *won;
 }
-
-void Board::statusOfPlayers()
-{
-    printf("\t\tPositions of Players:\n\t\t\t");
-    for (Player &p : players)
-        printf("Player(%s):%d,\t", p.getName().c_str(), p.getPosition());
-    printf("\n\n");
-}
